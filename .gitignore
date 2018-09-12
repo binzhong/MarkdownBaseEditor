@@ -1,0 +1,22 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# unix
+*~
+
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# My custom
+# vi/vim
+*.swp
+
+# Visual Studio Code
+.vscode/
