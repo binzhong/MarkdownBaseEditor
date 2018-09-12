@@ -36,6 +36,9 @@ def setMainWidget(widget):
     global mainWidget
     mainWidget = widget
 
+# timer interval, msec milliseconds
+TimerInterval = 1000
+
 # The current file name
 curFileName = ''
 

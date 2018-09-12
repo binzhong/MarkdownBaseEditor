@@ -43,7 +43,7 @@ def saveCurrentFile():
         file = open(curFileName,'w')
 
         with file:
-            data = getMainWidget().toPlainText()
+            data = getMainWidget().textEdit.toPlainText()
             file.write(data)
 
 def openFileDialog():
@@ -63,5 +63,5 @@ def openFileDialog():
 
             #update the text and the title of the main window
             data = file.read()
-            getTextEdit().setText(data)
+            getMainWidget().textEdit.setText(data)
             getMainWidget().updateWindowTitle()
