@@ -19,16 +19,21 @@ class ToolBar(QToolBar):
         self.setFloatable(False)
 
 
-def initToolBar():
-    openFile = getToolBar().addAction(Str_Open)
+def initToolBar(mainWidget):
+    openFile = mainWidget.toolBar.addAction(Str_Open)
     openFile.setShortcut(Shortcut_OpenFile)
     openFile.setIcon(QIcon(PathForOpenIcon))
     openFile.triggered.connect(openFileDialog)
 
-    saveFile = getToolBar().addAction(Str_Save)
+    saveFile = mainWidget.toolBar.addAction(Str_Save)
     saveFile.setShortcut(Shortcut_SaveFile)
     saveFile.setIcon(QIcon(PathForSaveIcon))
     saveFile.triggered.connect(saveCurrentFile)
+
+    togglePW = mainWidget.toolBar.addAction(Str_TogglePreviewWindow)
+    togglePW.setShortcut(Shortcut_TogglePW)
+    togglePW.setIcon(QIcon(PathForToggleIcon))
+    togglePW.triggered.connect(mainWidget.togglePreviewWindow)
     
 
 def saveCurrentFile():
@@ -38,7 +43,7 @@ def saveCurrentFile():
         file = open(curFileName,'w')
 
         with file:
-            data = getTextEdit().toPlainText()
+            data = getMainWidget().toPlainText()
             file.write(data)
 
 def openFileDialog():
@@ -60,6 +65,3 @@ def openFileDialog():
             data = file.read()
             getTextEdit().setText(data)
             getMainWidget().updateWindowTitle()
-    
-
-

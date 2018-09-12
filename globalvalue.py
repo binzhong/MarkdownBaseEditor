@@ -7,16 +7,19 @@ SoftWareName = 'GitNote'
 # Tool Bar
 Str_Open = 'Open'
 Str_OpenDialogTitle = 'Open file'
+Str_TogglePreviewWindow = 'Open/Close Preview window'
 
 Str_Save = 'Save'
 
 # Icon source path
 PathForOpenIcon = './resource/icon/open.ico'
 PathForSaveIcon = './resource/icon/save.ico'
+PathForToggleIcon = './resource/icon/toggle.ico'
 
 # Shortcut key
 Shortcut_OpenFile = 'Ctrl+o'
 Shortcut_SaveFile = 'Ctrl+s'
+Shortcut_TogglePW = 'Ctrl+p'
 
 # Const String
 STR_NULL = ''
@@ -32,28 +35,6 @@ def getMainWidget():
 def setMainWidget(widget):
     global mainWidget
     mainWidget = widget
-
-# ToolBar
-toolBar = None
-
-def getToolBar():
-    global toolBar
-    return toolBar
-
-def setToolBar(toolbar):
-    global toolBar
-    toolBar = toolbar
-
-# TextEdit
-textEdit = None
-
-def getTextEdit():
-    global textEdit
-    return textEdit
-
-def setTextEdit(textedit):
-    global textEdit
-    textEdit = textedit
 
 # The current file name
 curFileName = ''
