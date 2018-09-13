@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QDesktopWidget, QHBoxLayout, QVBoxLayout, QSplitter
+from PyQt5.QtWidgets import QWidget, QDesktopWidget, QHBoxLayout, QVBoxLayout, QSplitter, QSizePolicy
 from PyQt5.QtCore import Qt, QTimer
 from markdown import markdown
 
@@ -19,20 +19,23 @@ class MainWidget(QWidget):
 
     def initUI(self):
         #init Text edit
-        self.textEdit = TextEdit()
+        self.textEdit = TextEdit(self)
         #init Tool bar
-        self.toolBar = ToolBar()
+        self.toolBar = ToolBar(self)
         initToolBar(self)
         #init textSplitter
+        self.textSplitter = QSplitter(Qt.Horizontal, self)
+        self.textSplitter.addWidget(self.textEdit)
+        #init textBrowser
         self.bShowPW = False
-        self.textSplitter = None
+        self.textBrowser = None
         #init timer
         self.timer = None
 
         #init layout
         self.centerVBox = QVBoxLayout()
         self.centerVBox.addWidget(self.toolBar)
-        self.centerVBox.addWidget(self.textEdit)
+        self.centerVBox.addWidget(self.textSplitter)
         self.centerVBox.setSpacing(0)
         self.centerVBox.setContentsMargins(3, 0, 3, 3)
         self.setLayout(self.centerVBox)
@@ -57,7 +60,7 @@ class MainWidget(QWidget):
     def togglePreviewWindow(self):
         self.setUpdatesEnabled(False)
 
-        if self.textSplitter != None and self.bShowPW:
+        if self.textBrowser != None and self.bShowPW:
             self.hideTextBrowser()
         else:
             self.showTextBrowser()
@@ -67,7 +70,7 @@ class MainWidget(QWidget):
     
     def showTextBrowser(self):
         self.bShowPW = True
-        self.createTextSplitter()
+        self.createTextBrowser()
         self.textBrowser.show()
         
     def hideTextBrowser(self):
@@ -75,20 +78,15 @@ class MainWidget(QWidget):
         self.timer.stop()
         self.textBrowser.hide()
         
-    def createTextSplitter(self):
-        if self.textSplitter == None:
+    def createTextBrowser(self):
+        if self.textBrowser == None:
             #create the textbrowser and splitter
-            self.textBrowser = TextBrowser()
-            self.textSplitter = QSplitter(Qt.Horizontal, self)
-
+            self.textBrowser = TextBrowser(self)
             #create the timer for flush textBrowser
             self.createTimerForRefreshTextBrowser()
 
-        #Re-layout the widgets
-        self.centerVBox.removeWidget(self.textEdit)
-        self.textSplitter.addWidget(self.textEdit)
+        #text splitter add textbrowser
         self.textSplitter.addWidget(self.textBrowser)
-        self.centerVBox.addWidget(self.textSplitter)
     
     def createTimerForRefreshTextBrowser(self):
         if self.timer == None:
