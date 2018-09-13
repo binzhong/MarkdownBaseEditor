@@ -34,7 +34,10 @@ def initToolBar(mainWidget):
     togglePW.setShortcut(Shortcut_TogglePW)
     togglePW.setIcon(QIcon(PathForToggleIcon))
     togglePW.triggered.connect(mainWidget.togglePreviewWindow)
-    
+
+    height = mainWidget.toolBar.iconSize().height()
+    mainWidget.toolBar.setMaximumHeight(height)
+
 
 def saveCurrentFile():
     curFileName = getCurrentFileName()
