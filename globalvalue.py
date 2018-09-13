@@ -3,6 +3,15 @@
 
 # About SoftWare
 SoftWareName = 'GitNote'
+DefaultFontList = [ 
+    'dlslkafjsld lsdkjfal',
+    'Microsoft YaHei UI',
+    '微软雅黑',
+    '宋体'
+]
+DefaultFontSize = 12
+
+DefaultFontSizeForToolTip = 8
 
 # Tool Bar
 Str_Open = 'Open'
@@ -12,9 +21,9 @@ Str_TogglePreviewWindow = 'Open/Close Preview window'
 Str_Save = 'Save'
 
 # Icon source path
-PathForOpenIcon = './resource/icon/open.ico'
-PathForSaveIcon = './resource/icon/save.ico'
-PathForToggleIcon = './resource/icon/toggle.ico'
+PathForOpenIcon = './resource/icon/open.bmp'
+PathForSaveIcon = './resource/icon/save.bmp'
+PathForToggleIcon = './resource/icon/toggle.bmp'
 
 # Shortcut key
 Shortcut_OpenFile = 'Ctrl+o'
