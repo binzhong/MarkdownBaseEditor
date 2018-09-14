@@ -9,6 +9,7 @@ from PyQt5.QtGui import QIcon
 
 from localelanguage import tr
 from globalvalue import *
+from multiencodefile import mcOpen, McFile, openWithEncoding
 
 class ToolBar(QToolBar):
     def __init__(self, parent = None):
@@ -41,12 +42,10 @@ def initToolBar(mainWidget):
 
 
 def saveCurrentFile():
-    curFileName = getCurrentFileName()
+    curFileInfo = getCurrentFileInfo()
 
-    if curFileName != STR_NULL:
-        file = open(curFileName,'w')
-
-        with file:
+    if curFileInfo != None:
+        with openWithEncoding(curFileInfo.fileName,'w', curFileInfo.encoding) as file:
             data = getMainWidget().textEdit.toPlainText()
             file.write(data)
 
@@ -55,15 +54,14 @@ def openFileDialog():
     fileName = QFileDialog.getOpenFileName(getMainWidget(), tr(Str_OpenDialogTitle))
 
     if fileName[0]:
-        file = open(fileName[0], 'r')
-        with file:
+        with mcOpen(fileName[0], 'r') as mcFile:
             # save the current file
             saveCurrentFile()
 
-            # backup the current file name
-            setCurrentFileName(fileName[0])
+            # backup the current file infomation
+            setCurrentFileInfoWithDetail(fileName[0], mcFile.encoding)
 
             #update the text and the title of the main window
-            data = file.read()
+            data = mcFile.file.read()
             getMainWidget().textEdit.setText(data)
             getMainWidget().updateWindowTitle()

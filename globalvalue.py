@@ -47,13 +47,44 @@ def setMainWidget(widget):
 # timer interval, msec milliseconds
 TimerInterval = 1000
 
-# The current file name
-curFileName = ''
+# The current file infomation
+class FileInfo():
+    def __init__(self, fileName, encoding = 'utf-8'):
+        # It is important class, don't allow invalid value
+        assert(fileName != '' and fileName != None)
+
+        self.fileName = fileName
+        self.encoding = encoding
+
+curFileInfo = None
 
 def getCurrentFileName():
-    global curFileName
-    return curFileName
+    global curFileInfo
+    if curFileInfo == None:
+        return STR_NULL
+    else:
+        return curFileInfo.fileName
 
-def setCurrentFileName(fileName):
-    global curFileName
-    curFileName = fileName
+def getCurrentFileInfo():
+    global curFileInfo
+    return curFileInfo
+
+def setCurrentFileInfo(fileInfo):
+    # It is an important value, don't allow invalid value
+    assert(fileInfo != None)
+
+    global curFileInfo
+    curFileInfo = fileInfo
+
+def setCurrentFileInfoWithDetail(fileName, encoding):
+    # It is an important value, don't allow invalid value
+    assert(fileName != STR_NULL and fileName != None)
+    assert(encoding != STR_NULL and encoding != None)
+
+    global curFileInfo
+    
+    if curFileInfo == None:
+        curFileInfo = FileInfo(fileName, encoding)
+    else:
+        curFileInfo.fileName = fileName
+        curFileInfo.encoding = encoding
