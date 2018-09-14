@@ -9,15 +9,20 @@ DefaultFontList = [
     '宋体'
 ]
 DefaultFontSize = 12
-
 DefaultFontSizeForToolTip = 8
+DefaultFileEncoding = 'utf-8'
 
 # Tool Bar
+Str_Save = 'Save'
 Str_Open = 'Open'
 Str_OpenDialogTitle = 'Open file'
 Str_TogglePreviewWindow = 'Open/Close Preview window'
 
-Str_Save = 'Save'
+# Some Dialog
+Str_MessageBoxTitle = 'Message'
+Str_QuestionForIfSaveFile = "The current file's constents is changed, do you want to save it?"
+Str_SaveFileDialogTitle = 'Save file'
+
 
 # Icon source path
 PathForOpenIcon = './resource/icon/open.bmp'
@@ -49,7 +54,7 @@ TimerInterval = 1000
 
 # The current file infomation
 class FileInfo():
-    def __init__(self, fileName, encoding = 'utf-8'):
+    def __init__(self, fileName, encoding = DefaultFileEncoding):
         # It is important class, don't allow invalid value
         assert(fileName != '' and fileName != None)
 

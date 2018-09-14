@@ -3,6 +3,7 @@
 
 import sys
 import locale
+from globalvalue import *
 
 def tr(s):
     global language
@@ -34,9 +35,13 @@ langList = ['zh_CN']
 # language dict
 langDict = {
     # english chinese
-    'Open':['打开'],
-    'Save':['保存'],
-    'Open/Close Preview window':[
+    Str_Open:['打开'],
+    Str_Save:['保存'],
+    Str_TogglePreviewWindow:[
         '打开/关闭 预览'
+    ],
+    Str_MessageBoxTitle:['消息'],
+    Str_QuestionForIfSaveFile:[
+        '当前文件内容已更改，是否保存？'
     ]
 }

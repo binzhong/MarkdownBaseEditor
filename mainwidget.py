@@ -20,6 +20,8 @@ class MainWidget(QWidget):
     def initUI(self):
         #init Text edit
         self.textEdit = TextEdit(self)
+        self.textEdit.textChanged.connect(self.textChanged)
+        self.bTextChanged = False
         #init Tool bar
         self.toolBar = ToolBar(self)
         initToolBar(self)
@@ -50,13 +52,25 @@ class MainWidget(QWidget):
                          screen.height() * 2 / 3)
         self.show()
     
-    def updateWindowTitle(self):
-        curFileName = getCurrentFileName()
-        if curFileName != STR_NULL:
-            self.setWindowTitle(curFileName)
-        else:
-            self.setWindowTitle(SoftWareName)
+    # Text Edit   
+    def textChanged(self):
+        if self.bTextChanged == False:
+            self.bTextChanged = True
     
+    def resetTextChangedFlag(self):
+        self.bTextChanged = False
+    
+    def isTextChanged(self):
+        return self.bTextChanged
+    
+    def getPlainText(self):
+        return self.textEdit.toPlainText()
+    
+    def setPlainText(self, data):
+        self.textEdit.setPlainText(data)
+        self.resetTextChangedFlag()
+    
+    # Text Browser
     def togglePreviewWindow(self):
         self.setUpdatesEnabled(False)
 
@@ -102,3 +116,11 @@ class MainWidget(QWidget):
         html = markdown(data)
         self.textBrowser.setText(html)
         
+    # main widget 
+    def updateWindowTitle(self):
+        curFileName = getCurrentFileName()
+        if curFileName != STR_NULL:
+            self.setWindowTitle(curFileName)
+        else:
+            self.setWindowTitle(SoftWareName)
+    

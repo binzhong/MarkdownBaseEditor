@@ -4,9 +4,10 @@
 import sys
 import codecs
 import chardet
+from globalvalue import DefaultFileEncoding
 
 class McFile():
-    def __init__(self, file = None, encoding = 'utf-8'):
+    def __init__(self, file = None, encoding = DefaultFileEncoding):
         self.file = file
         self.encoding = encoding
     
