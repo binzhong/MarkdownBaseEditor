@@ -33,6 +33,4 @@ if __name__ == '__main__':
     try:
         sys.exit(app.exec_())
     except SystemExit:
-        from toolbar import saveCurrentFile
-        saveCurrentFile()
         pass

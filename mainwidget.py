@@ -8,7 +8,7 @@ from markdown import markdown
 from globalvalue import *
 from textedit import TextEdit
 from textbrowser import TextBrowser
-from toolbar import initToolBar, ToolBar
+from toolbar import initToolBar, ToolBar, saveCurrentFile
 
 # main window need to customize user interface, use the QWidget but the QMainWindow
 class MainWidget(QWidget):
@@ -124,3 +124,6 @@ class MainWidget(QWidget):
         else:
             self.setWindowTitle(SoftWareName)
     
+    def closeEvent(self, event):
+        saveCurrentFile()
+        event.accept()
