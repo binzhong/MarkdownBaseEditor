@@ -7,6 +7,7 @@ import sys
 from PyQt5.QtWidgets import QToolBar, QAction, QFileDialog
 from PyQt5.QtGui import QIcon
 
+from localelanguage import tr
 from globalvalue import *
 
 class ToolBar(QToolBar):
@@ -20,17 +21,17 @@ class ToolBar(QToolBar):
 
 
 def initToolBar(mainWidget):
-    openFile = mainWidget.toolBar.addAction(Str_Open)
+    openFile = mainWidget.toolBar.addAction(tr(Str_Open))
     openFile.setShortcut(Shortcut_OpenFile)
     openFile.setIcon(QIcon(PathForOpenIcon))
     openFile.triggered.connect(openFileDialog)
 
-    saveFile = mainWidget.toolBar.addAction(Str_Save)
+    saveFile = mainWidget.toolBar.addAction(tr(Str_Save))
     saveFile.setShortcut(Shortcut_SaveFile)
     saveFile.setIcon(QIcon(PathForSaveIcon))
     saveFile.triggered.connect(saveCurrentFile)
 
-    togglePW = mainWidget.toolBar.addAction(Str_TogglePreviewWindow)
+    togglePW = mainWidget.toolBar.addAction(tr(Str_TogglePreviewWindow))
     togglePW.setShortcut(Shortcut_TogglePW)
     togglePW.setIcon(QIcon(PathForToggleIcon))
     togglePW.triggered.connect(mainWidget.togglePreviewWindow)
@@ -50,10 +51,8 @@ def saveCurrentFile():
             file.write(data)
 
 def openFileDialog():
-    import Main
-
     #homePath = 'C:/Users/UserName/'
-    fileName = QFileDialog.getOpenFileName(getMainWidget(), Str_OpenDialogTitle)
+    fileName = QFileDialog.getOpenFileName(getMainWidget(), tr(Str_OpenDialogTitle))
 
     if fileName[0]:
         file = open(fileName[0], 'r')

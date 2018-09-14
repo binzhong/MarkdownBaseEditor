@@ -4,7 +4,6 @@
 # About SoftWare
 SoftWareName = 'GitNote'
 DefaultFontList = [ 
-    'dlslkafjsld lsdkjfal',
     'Microsoft YaHei UI',
     '微软雅黑',
     '宋体'

@@ -8,9 +8,13 @@ from globalvalue import setMainWidget, DefaultFontList, DefaultFontSize, Default
 from mainwidget import MainWidget
 
 import sys
+from localelanguage import initLocale
 
 
 if __name__ == '__main__':
+
+    #init locale
+    initLocale()
 
     app = QApplication(sys.argv)
     #Try to init font with default font list

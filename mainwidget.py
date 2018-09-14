@@ -34,10 +34,10 @@ class MainWidget(QWidget):
 
         #init layout
         self.centerVBox = QVBoxLayout()
-        self.centerVBox.addWidget(self.toolBar)
         self.centerVBox.addWidget(self.textSplitter)
+        self.centerVBox.addWidget(self.toolBar)
         self.centerVBox.setSpacing(0)
-        self.centerVBox.setContentsMargins(3, 0, 3, 3)
+        self.centerVBox.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.centerVBox)
 
         #init tile
