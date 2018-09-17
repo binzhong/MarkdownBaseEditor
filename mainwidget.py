@@ -3,12 +3,12 @@
 
 from PyQt5.QtWidgets import QWidget, QDesktopWidget, QHBoxLayout, QVBoxLayout, QSplitter, QSizePolicy
 from PyQt5.QtCore import Qt, QTimer
-from markdown import markdown
 
 from globalvalue import *
 from textedit import TextEdit
 from textbrowser import TextBrowser
 from toolbar import initToolBar, ToolBar, saveCurrentFile
+
 
 # main window need to customize user interface, use the QWidget but the QMainWindow
 class MainWidget(QWidget):
@@ -113,8 +113,7 @@ class MainWidget(QWidget):
 
     def fleshTextBrowser(self):
         data = self.textEdit.toPlainText()
-        html = markdown(data)
-        self.textBrowser.setText(html)
+        self.textBrowser.setText(data)
         
     # main widget 
     def updateWindowTitle(self):
