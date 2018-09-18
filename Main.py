@@ -29,8 +29,4 @@ if __name__ == '__main__':
     mainWidget = MainWidget()
     setMainWidget(mainWidget)
 
-    # catch the : SystemExit
-    try:
-        sys.exit(app.exec_())
-    except SystemExit:
-        pass
+    sys.exit(app.exec_())

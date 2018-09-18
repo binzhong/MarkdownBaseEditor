@@ -44,8 +44,9 @@ def initToolBar(mainWidget):
 def saveCurrentFile():
     mainWidget = getMainWidget()
     #Check the flag of text changed
-    if not mainWidget.isTextChanged():
+    if mainWidget.isTextSaved():
         return
+    mainWidget.resetTextSavedFlag()
 
     #If current file is valid, save it
     curFileInfo = getCurrentFileInfo()
@@ -59,15 +60,11 @@ def saveCurrentFile():
             data = mainWidget.getPlainText()
             file.write(data)
 
-        #Reset the flag of text changed
-        mainWidget.resetTextChangedFlag()
         return
 
     #Otherwise check the contents in textedit
     contents = mainWidget.getPlainText()
     if len(contents) < 1:
-        #Contents is empty string, just return
-        mainWidget.resetTextChangedFlag()
         return
 
     reply = QMessageBox.question(mainWidget, tr(Str_MessageBoxTitle), 
@@ -81,12 +78,11 @@ def saveCurrentFile():
         with openWithEncoding(fileName[0], 'w', DefaultFileEncoding) as file:
             data = mainWidget.getPlainText()
             file.write(data)
-        mainWidget.resetTextChangedFlag()
 
 def saveCurrentFileWithoutAsk():
     mainWidget = getMainWidget()
     #Check the flag of text changed
-    if not mainWidget.isTextChanged():
+    if mainWidget.isTextSaved():
         return
 
     #If current file is valid, save it
@@ -96,14 +92,7 @@ def saveCurrentFileWithoutAsk():
             data = mainWidget.getPlainText()
             file.write(data)
         #Reset the flag of text changed
-        mainWidget.resetTextChangedFlag()
-        return
-
-    #Otherwise check the contents in textedit
-    contents = mainWidget.getPlainText()
-    if len(contents) < 1:
-        #Contents is empty string, just return
-        mainWidget.resetTextChangedFlag()
+        mainWidget.resetTextSavedFlag()
         return
 
     #Save file dialog
@@ -112,7 +101,7 @@ def saveCurrentFileWithoutAsk():
         with openWithEncoding(fileName[0], 'w', DefaultFileEncoding) as file:
             data = mainWidget.getPlainText()
             file.write(data)
-        mainWidget.resetTextChangedFlag()
+        mainWidget.resetTextSavedFlag()
 
 
 def openFileDialog():
@@ -120,7 +109,8 @@ def openFileDialog():
     saveCurrentFile()
 
     #homePath = 'C:/Users/UserName/'
-    fileName = QFileDialog.getOpenFileName(getMainWidget(), tr(Str_OpenDialogTitle))
+    mainWidget = getMainWidget()
+    fileName = QFileDialog.getOpenFileName(mainWidget, tr(Str_OpenDialogTitle))
 
     if fileName[0]:
         with mcOpen(fileName[0], 'r') as mcFile:
@@ -129,5 +119,6 @@ def openFileDialog():
 
             #update the text and the title of the main window
             data = mcFile.file.read()
-            getMainWidget().setPlainText(data)
-            getMainWidget().updateWindowTitle()
+            mainWidget.setPlainText(data)
+            mainWidget.updateWindowTitle()
+            mainWidget.resetTextSavedFlag()

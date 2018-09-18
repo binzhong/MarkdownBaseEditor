@@ -22,6 +22,8 @@ class MainWidget(QWidget):
         self.textEdit = TextEdit(self)
         self.textEdit.textChanged.connect(self.textChanged)
         self.bTextChanged = False
+        self.bTextSaved = True
+        self.bCursorPosChanged = False
         #init Tool bar
         self.toolBar = ToolBar(self)
         initToolBar(self)
@@ -56,6 +58,8 @@ class MainWidget(QWidget):
     def textChanged(self):
         if self.bTextChanged == False:
             self.bTextChanged = True
+        if self.bTextSaved == True:
+            self.bTextSaved = False
     
     def resetTextChangedFlag(self):
         self.bTextChanged = False
@@ -63,18 +67,33 @@ class MainWidget(QWidget):
     def isTextChanged(self):
         return self.bTextChanged
     
+    def resetTextSavedFlag(self):
+        self.bTextSaved = True
+    
+    def isTextSaved(self):
+        return self.bTextSaved
+    
+    def cursorPosChanged(self):
+        if self.bCursorPosChanged == False :
+            self.bCursorPosChanged = True
+    
+    def resetCursorPosChangedFlag(self):
+        self.bCursorPosChanged = False
+    
+    def isCursorPosChanged(self):
+        return self.bCursorPosChanged
+    
     def getPlainText(self):
         return self.textEdit.toPlainText()
     
     def setPlainText(self, data):
         self.textEdit.setPlainText(data)
-        self.resetTextChangedFlag()
     
     # Text Browser
     def togglePreviewWindow(self):
         self.setUpdatesEnabled(False)
 
-        if self.textBrowser != None and self.bShowPW:
+        if self.bShowPW:
             self.hideTextBrowser()
         else:
             self.showTextBrowser()
@@ -84,7 +103,14 @@ class MainWidget(QWidget):
     
     def showTextBrowser(self):
         self.bShowPW = True
-        self.createTextBrowser()
+        if self.textBrowser == None:
+            self.textBrowser = TextBrowser(self)
+            #create the timer for flush textBrowser
+            self.createTimerForRefreshTextBrowser()
+            #text splitter add textbrowser
+            self.textSplitter.addWidget(self.textBrowser)
+            #sync the position of textedit to textbrowser
+            self.textEdit.cursorPositionChanged.connect(self.cursorPosChanged)
         self.textBrowser.show()
         
     def hideTextBrowser(self):
@@ -92,16 +118,6 @@ class MainWidget(QWidget):
         self.timer.stop()
         self.textBrowser.hide()
         
-    def createTextBrowser(self):
-        if self.textBrowser == None:
-            #create the textbrowser and splitter
-            self.textBrowser = TextBrowser(self)
-            #create the timer for flush textBrowser
-            self.createTimerForRefreshTextBrowser()
-
-        #text splitter add textbrowser
-        self.textSplitter.addWidget(self.textBrowser)
-    
     def createTimerForRefreshTextBrowser(self):
         if self.timer == None:
             self.timer = QTimer(self)
@@ -112,8 +128,57 @@ class MainWidget(QWidget):
             self.timer.start()
 
     def fleshTextBrowser(self):
-        data = self.textEdit.toPlainText()
-        self.textBrowser.setText(data)
+        if self.isTextChanged():
+            self.setUpdatesEnabled(False)
+            data = self.textEdit.toPlainText()
+            self.textBrowser.setText(data)
+            self.resetTextChangedFlag()
+            #Avoid resync the textbrowser when user is inputting
+            if self.isCursorPosChanged():
+                self.syncTextBrowserPosition()
+                self.resetCursorPosChangedFlag()
+            self.setUpdatesEnabled(True)
+        elif self.isCursorPosChanged():
+            self.syncTextBrowserPosition()
+            self.resetCursorPosChangedFlag()
+    
+    def syncTextBrowserPosition(self):
+        browserSB = self.textBrowser.verticalScrollBar()
+        maximum2 = browserSB.maximum()
+        if maximum2 == 0: #without scrollbar
+            return
+
+        minimum2 = browserSB.minimum()
+        pageStep2 = browserSB.pageStep()
+
+        #scrollbar area
+        textSB = self.textEdit.verticalScrollBar()
+        maximum = textSB.maximum()
+        destPos = 0
+        if maximum == 0:
+            pos = self.textEdit.textCursor().position()
+            length = len(self.textEdit.toPlainText())
+            if length == 0:
+                return
+            destPos = int((maximum2 - minimum2 + pageStep2)*float(pos/length) + minimum2 - float(pageStep2/2))
+        else:
+            curSBPos = textSB.value()
+            minimum = textSB.minimum()
+            pageStep = textSB.pageStep()
+            #cursor position
+            cursorRect = self.textEdit.cursorRect()
+            yPos = cursorRect.center().y()
+            #viewport's height
+            vpHeight = self.textEdit.viewport().height()
+            destPos = int((maximum2 - minimum2 + pageStep2)*((curSBPos + pageStep*float(yPos/vpHeight) 
+            - minimum2)/(maximum - minimum + pageStep)) + minimum2 - float(pageStep2/2))
+        
+        #Ajust the result
+        if destPos < minimum2:
+            destPos = minimum2
+        elif destPos > maximum2:
+            destPos = maximum2
+        browserSB.setValue(destPos)
         
     # main widget 
     def updateWindowTitle(self):
